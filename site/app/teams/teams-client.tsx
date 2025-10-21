@@ -36,6 +36,152 @@ interface School {
   secondary_color_2: string | null;
 }
 
+interface WrestlerMatch {
+  wrestler: string;
+  opponent: string;
+  result: 'Win' | 'Loss';
+  wrestler_school: string;
+  opponent_school: string;
+  date: string;
+  wt: number;
+  location: string;
+  event: string;
+  score: string;
+  result_type: string;
+  criteria: string | null;
+  fall_time: number | null;
+  wrestler_score: number | null;
+  opponent_score: number | null;
+  dominance_score: number;
+}
+
+interface DualResultsTableProps {
+  dual: DualResult;
+  selectedTeam: string;
+  schools: School[];
+}
+
+function DualResultsTable({ dual, selectedTeam, schools }: DualResultsTableProps) {
+  const [wrestlerMatches, setWrestlerMatches] = useState<WrestlerMatch[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadWrestlerData() {
+      try {
+        const response = await fetch('/data/wrestlers-2025.json');
+        const allMatches: WrestlerMatch[] = await response.json();
+        
+        // Filter matches for this specific dual - only show matches where selected team is the wrestler
+        const dualMatches = allMatches.filter(match => 
+          match.date === dual.date && 
+          match.location === dual.location &&
+          match.wrestler_school === dual.school &&
+          match.opponent_school === dual.opponent_school
+        );
+        
+        // Sort by weight class (ascending)
+        dualMatches.sort((a, b) => a.wt - b.wt);
+        
+        setWrestlerMatches(dualMatches);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading wrestler data:', error);
+        setLoading(false);
+      }
+    }
+
+    loadWrestlerData();
+  }, [dual]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (wrestlerMatches.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        No individual match results found for this dual.
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Weight Class
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Wrestler
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Team Score
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Team Result
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Match Score
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Opponent Team Score
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Opponent
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {wrestlerMatches.map((match, index) => {
+            // Since we filtered for selectedTeam as wrestler_school, the logic is simpler
+            const teamResult = match.result;
+            const teamScore = teamResult === 'Win' ? Math.abs(match.dominance_score) : 0;
+            const opponentScore = teamResult === 'Loss' ? Math.abs(match.dominance_score) : 0;
+            
+            return (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {match.wt}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {match.wrestler}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {teamScore > 0 ? `+${teamScore}` : '0'}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap">
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                    teamResult === 'Win' 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-red-100 text-red-800'
+                  }`}>
+                    {teamResult}
+                  </span>
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {match.score}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {opponentScore > 0 ? `+${opponentScore}` : '0'}
+                </td>
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {match.opponent}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function TeamsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -49,6 +195,8 @@ export default function TeamsClient() {
   const [conferenceFilter, setConferenceFilter] = useState<string>('all');
   const [seasonFilter, setSeasonFilter] = useState<string>('2024-2025');
   const [showCopied, setShowCopied] = useState(false);
+  const [selectedDual, setSelectedDual] = useState<DualResult | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Initialize state from URL params
   useEffect(() => {
@@ -472,10 +620,13 @@ export default function TeamsClient() {
                         Score
                       </th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
-                        Non-D1
+                        Division
                       </th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
                         Result
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
+                        Details
                       </th>
                     </tr>
                   </thead>
@@ -519,6 +670,17 @@ export default function TeamsClient() {
                             {result.result}
                           </span>
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => {
+                              setSelectedDual(result);
+                              setShowModal(true);
+                            }}
+                            className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            View Details
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -529,6 +691,109 @@ export default function TeamsClient() {
                 No results found for {selectedTeam}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Dual Details Modal */}
+        {showModal && selectedDual && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white">
+              <div className="mt-3">
+                {/* Modal Header */}
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    {selectedDual.school} vs {selectedDual.opponent_school}
+                  </h3>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Enhanced Modal Header */}
+                <div className="mb-6">
+                  <div className="text-center mb-4">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Dual Result</h2>
+                    <p className="text-sm text-gray-600">
+                      {new Date(selectedDual.date).toLocaleDateString()} • {selectedDual.location}
+                    </p>
+                  </div>
+                  
+                  {/* Team Scores with Large Text */}
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="text-center flex-1">
+                      <div className="text-4xl font-bold text-gray-900 mb-1">
+                        {selectedDual.school}
+                      </div>
+                      <div 
+                        className="text-5xl font-black"
+                        style={{ 
+                          color: schools.find(s => s.school === selectedDual.school)?.primary_color_1 || '#3B82F6' 
+                        }}
+                      >
+                        {selectedDual.score}
+                      </div>
+                    </div>
+                    
+                    <div className="text-2xl font-bold text-gray-400 mx-8">
+                      vs
+                    </div>
+                    
+                    <div className="text-center flex-1">
+                      <div className="text-4xl font-bold text-gray-900 mb-1">
+                        {selectedDual.opponent_school}
+                      </div>
+                      <div 
+                        className="text-5xl font-black"
+                        style={{ 
+                          color: schools.find(s => s.school === selectedDual.opponent_school)?.primary_color_1 || '#EF4444' 
+                        }}
+                      >
+                        {selectedDual.opponent_score}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Proportional Score Bar */}
+                  <div className="w-full bg-gray-200 rounded-full h-8 overflow-hidden">
+                    <div className="flex h-full">
+                      {/* Team 1 Bar */}
+                      <div 
+                        className="flex items-center justify-center text-white font-bold text-lg"
+                        style={{ 
+                          width: `${Math.max(10, (selectedDual.score / (selectedDual.score + selectedDual.opponent_score)) * 100)}%`,
+                          backgroundColor: schools.find(s => s.school === selectedDual.school)?.primary_color_1 || '#3B82F6'
+                        }}
+                      >
+                        {selectedDual.score}
+                      </div>
+                      
+                      {/* Team 2 Bar */}
+                      <div 
+                        className="flex items-center justify-center text-white font-bold text-lg"
+                        style={{ 
+                          width: `${Math.max(10, (selectedDual.opponent_score / (selectedDual.score + selectedDual.opponent_score)) * 100)}%`,
+                          backgroundColor: schools.find(s => s.school === selectedDual.opponent_school)?.primary_color_1 || '#EF4444'
+                        }}
+                      >
+                        {selectedDual.opponent_score}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Individual Match Results */}
+                <DualResultsTable 
+                  dual={selectedDual} 
+                  selectedTeam={selectedTeam}
+                  schools={schools}
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>

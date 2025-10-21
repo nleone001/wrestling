@@ -482,32 +482,43 @@ export default function TeamsClient() {
           </select>
         </div>
 
-        {/* Selected Team Display */}
-        {selectedTeam && (() => {
-          const selectedTeamData = teams.find(t => t.name === selectedTeam);
-          return selectedTeamData ? (
-            <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-4xl font-bold text-gray-900 mb-2">
-                    {selectedTeamData.name}
-                  </h2>
-                  <p className="text-xl text-gray-600">
-                    Conference: {selectedTeamData.conference}
-                  </p>
+            {/* Selected Team Display */}
+            {selectedTeam && (() => {
+              const selectedTeamData = teams.find(t => t.name === selectedTeam);
+              const teamColor = schools.find(s => s.school === selectedTeam)?.primary_color_1 || '#3B82F6';
+              return selectedTeamData ? (
+                <div 
+                  className="rounded-lg shadow-lg p-6 mb-8 border-4"
+                  style={{ 
+                    borderColor: teamColor,
+                    backgroundColor: `${teamColor}08`, // 8% opacity background
+                    backgroundImage: `linear-gradient(135deg, ${teamColor}15 0%, ${teamColor}05 100%)`
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 
+                        className="text-4xl font-bold mb-2"
+                        style={{ color: teamColor }}
+                      >
+                        {selectedTeamData.name}
+                      </h2>
+                      <p className="text-xl text-gray-600">
+                        Conference: {selectedTeamData.conference}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-semibold text-gray-900">
+                        {selectedTeamData.wins}-{selectedTeamData.losses}
+                      </p>
+                      <p className="text-lg text-gray-600">
+                        {selectedTeamData.winPercentage.toFixed(1)}%
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {selectedTeamData.wins}-{selectedTeamData.losses}
-                  </p>
-                  <p className="text-lg text-gray-600">
-                    {selectedTeamData.winPercentage.toFixed(1)}%
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : null;
-        })()}
+              ) : null;
+            })()}
 
         {/* Team Stats Summary */}
         {selectedTeam && teamResults.length > 0 && (() => {
@@ -700,10 +711,7 @@ export default function TeamsClient() {
             <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white">
               <div className="mt-3">
                 {/* Modal Header */}
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    {selectedDual.school} vs {selectedDual.opponent_school}
-                  </h3>
+                <div className="flex justify-end items-center mb-4">
                   <button
                     onClick={() => setShowModal(false)}
                     className="text-gray-400 hover:text-gray-600"
@@ -763,7 +771,7 @@ export default function TeamsClient() {
                     <div className="flex h-full">
                       {/* Team 1 Bar */}
                       <div 
-                        className="flex items-center justify-center text-white font-bold text-lg"
+                        className="flex items-center justify-center text-white font-bold text-lg border-r-2 border-white"
                         style={{ 
                           width: `${Math.max(10, (selectedDual.score / (selectedDual.score + selectedDual.opponent_score)) * 100)}%`,
                           backgroundColor: schools.find(s => s.school === selectedDual.school)?.primary_color_1 || '#3B82F6'
@@ -792,6 +800,13 @@ export default function TeamsClient() {
                   selectedTeam={selectedTeam}
                   schools={schools}
                 />
+                
+                {/* Disclaimer */}
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <p className="text-xs text-gray-500 text-center">
+                    *Dual Results and Team Scores do not reflect any team point deductions if/when they occur :)
+                  </p>
+                </div>
               </div>
             </div>
           </div>

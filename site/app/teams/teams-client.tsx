@@ -47,6 +47,7 @@ export default function TeamsClient() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'name' | 'winPercentage'>('winPercentage');
   const [conferenceFilter, setConferenceFilter] = useState<string>('all');
+  const [seasonFilter, setSeasonFilter] = useState<string>('2024-2025');
   const [showCopied, setShowCopied] = useState(false);
 
   // Initialize state from URL params
@@ -54,14 +55,16 @@ export default function TeamsClient() {
     const team = searchParams.get('team') || '';
     const sort = (searchParams.get('sort') as 'name' | 'winPercentage') || 'winPercentage';
     const conference = searchParams.get('conference') || 'all';
+    const season = searchParams.get('season') || '2024-2025';
     
     setSelectedTeam(team);
     setSortBy(sort);
     setConferenceFilter(conference);
+    setSeasonFilter(season);
   }, [searchParams]);
 
   // Update URL when filters change
-  const updateURL = (newParams: { team?: string; sort?: string; conference?: string }) => {
+  const updateURL = (newParams: { team?: string; sort?: string; conference?: string; season?: string }) => {
     const params = new URLSearchParams(searchParams.toString());
     
     if (newParams.team !== undefined) {
@@ -76,6 +79,11 @@ export default function TeamsClient() {
     if (newParams.conference !== undefined) {
       if (newParams.conference !== 'all') params.set('conference', newParams.conference);
       else params.delete('conference');
+    }
+    
+    if (newParams.season !== undefined) {
+      if (newParams.season !== '2024-2025') params.set('season', newParams.season);
+      else params.delete('season');
     }
     
     router.replace(`/teams?${params.toString()}`, { scroll: false });
@@ -248,6 +256,21 @@ export default function TeamsClient() {
           
           {/* Filter Bar */}
           <div className="flex flex-wrap gap-4 mb-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-gray-700">Season:</label>
+              <select
+                value={seasonFilter}
+                onChange={(e) => {
+                  const newSeason = e.target.value;
+                  setSeasonFilter(newSeason);
+                  updateURL({ season: newSeason });
+                }}
+                className="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="2024-2025">2024-2025</option>
+              </select>
+            </div>
+            
             <div className="flex items-center gap-2">
               <label className="text-sm font-medium text-gray-700">Sort by:</label>
               <select

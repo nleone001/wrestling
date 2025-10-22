@@ -48,6 +48,12 @@ export default function RootLayout({
                   Duals
                 </Link>
                 <Link 
+                  href="/team-stats" 
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  Team Stats
+                </Link>
+                <Link 
                   href="/wrestlers" 
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >

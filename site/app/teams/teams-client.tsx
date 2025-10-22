@@ -495,26 +495,16 @@ export default function TeamsClient() {
                     backgroundImage: `linear-gradient(135deg, ${teamColor}15 0%, ${teamColor}05 100%)`
                   }}
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h2 
-                        className="text-4xl font-bold mb-2"
-                        style={{ color: teamColor }}
-                      >
-                        {selectedTeamData.name}
-                      </h2>
-                      <p className="text-xl text-gray-600">
-                        Conference: {selectedTeamData.conference}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-semibold text-gray-900">
-                        {selectedTeamData.wins}-{selectedTeamData.losses}
-                      </p>
-                      <p className="text-lg text-gray-600">
-                        {selectedTeamData.winPercentage.toFixed(1)}%
-                      </p>
-                    </div>
+                  <div className="text-center">
+                    <h2 
+                      className="text-4xl font-bold mb-2"
+                      style={{ color: teamColor }}
+                    >
+                      {selectedTeamData.name}
+                    </h2>
+                    <p className="text-xl text-gray-600">
+                      Conference: {selectedTeamData.conference}
+                    </p>
                   </div>
                 </div>
               ) : null;

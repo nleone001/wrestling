@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface DualResult {
   date: string;
@@ -150,7 +151,12 @@ function DualResultsTable({ dual, selectedTeam, schools }: DualResultsTableProps
                   {match.wt}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {match.wrestler}
+                  <Link 
+                    href={`/wrestlers?wrestler=${encodeURIComponent(match.wrestler)}`}
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {match.wrestler}
+                  </Link>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                   {teamScore > 0 ? `+${teamScore}` : '0'}
@@ -171,7 +177,12 @@ function DualResultsTable({ dual, selectedTeam, schools }: DualResultsTableProps
                   {opponentScore > 0 ? `+${opponentScore}` : '0'}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {match.opponent}
+                  <Link 
+                    href={`/wrestlers?wrestler=${encodeURIComponent(match.opponent)}`}
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {match.opponent}
+                  </Link>
                 </td>
               </tr>
             );
@@ -389,7 +400,7 @@ export default function TeamsClient() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                   </svg>
-                  Share
+                  Copy URL
                 </>
               )}
             </button>
@@ -638,7 +649,12 @@ export default function TeamsClient() {
                           {new Date(result.date).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {result.opponent_school}
+                          <Link 
+                            href={`/team-stats?team=${encodeURIComponent(result.opponent_school)}`}
+                            className="text-blue-600 hover:text-blue-800 hover:underline"
+                          >
+                            {result.opponent_school}
+                          </Link>
                           {result.isConferenceMatch && (
                             <span className="ml-2 inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
                               Conference

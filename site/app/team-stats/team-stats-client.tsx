@@ -356,7 +356,7 @@ export default function TeamStatsClient() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                   </svg>
-                  Share
+                  Copy URL
                 </>
               )}
             </button>
@@ -864,9 +864,6 @@ export default function TeamStatsClient() {
                         )}
                       </div>
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      View Wrestler
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -876,7 +873,12 @@ export default function TeamStatsClient() {
                         {wrestler.weight}
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {wrestler.name}
+                        <Link
+                          href={`/wrestlers?wrestler=${encodeURIComponent(wrestler.name)}`}
+                          className="text-blue-600 hover:text-blue-800 hover:underline"
+                        >
+                          {wrestler.name}
+                        </Link>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">
                         {wrestler.wins}
@@ -904,14 +906,6 @@ export default function TeamStatsClient() {
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm text-green-600">
                         {wrestler.decisions}
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap text-sm">
-                        <Link
-                          href={`/wrestlers?wrestler=${encodeURIComponent(wrestler.name)}`}
-                          className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                          View
-                        </Link>
                       </td>
                     </tr>
                   ))}

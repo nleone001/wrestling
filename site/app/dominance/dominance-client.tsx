@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 
 interface WrestlerMatch {
   wrestler: string;
@@ -346,10 +347,19 @@ export default function DominanceClient() {
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold text-gray-400 w-6">#{rank}</span>
                           <div>
-                            <p className="font-medium text-sm text-gray-900">{wrestler.name}</p>
-                            <p className="text-xs text-gray-600" style={{ color: schoolColor }}>
+                            <Link 
+                              href={`/wrestlers?wrestler=${encodeURIComponent(wrestler.name)}`}
+                              className="font-medium text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                            >
+                              {wrestler.name}
+                            </Link>
+                            <Link 
+                              href={`/team-stats?team=${encodeURIComponent(wrestler.school)}`}
+                              className="block text-xs hover:underline"
+                              style={{ color: schoolColor }}
+                            >
                               {wrestler.school}
-                            </p>
+                            </Link>
                           </div>
                         </div>
                         <div className="text-right">
@@ -406,10 +416,19 @@ export default function DominanceClient() {
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold text-gray-400 w-6">#{rank}</span>
                           <div>
-                            <p className="font-medium text-sm text-gray-900">{wrestler.name}</p>
-                            <p className="text-xs text-gray-600" style={{ color: schoolColor }}>
+                            <Link 
+                              href={`/wrestlers?wrestler=${encodeURIComponent(wrestler.name)}`}
+                              className="font-medium text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                            >
+                              {wrestler.name}
+                            </Link>
+                            <Link 
+                              href={`/team-stats?team=${encodeURIComponent(wrestler.school)}`}
+                              className="block text-xs hover:underline"
+                              style={{ color: schoolColor }}
+                            >
                               {wrestler.school}
-                            </p>
+                            </Link>
                           </div>
                         </div>
                         <div className="text-right">
@@ -468,10 +487,19 @@ export default function DominanceClient() {
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold text-gray-400 w-6">#{rank}</span>
                           <div>
-                            <p className="font-medium text-sm text-gray-900">{wrestler.name}</p>
-                            <p className="text-xs text-gray-600" style={{ color: schoolColor }}>
+                            <Link 
+                              href={`/wrestlers?wrestler=${encodeURIComponent(wrestler.name)}`}
+                              className="font-medium text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                            >
+                              {wrestler.name}
+                            </Link>
+                            <Link 
+                              href={`/team-stats?team=${encodeURIComponent(wrestler.school)}`}
+                              className="block text-xs hover:underline"
+                              style={{ color: schoolColor }}
+                            >
                               {wrestler.school}
-                            </p>
+                            </Link>
                           </div>
                         </div>
                         <div className="text-right">
@@ -533,9 +561,13 @@ export default function DominanceClient() {
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold text-gray-400 w-6">#{rank}</span>
                           <div>
-                            <p className="font-medium text-sm text-gray-900" style={{ color: schoolColor }}>
+                            <Link 
+                              href={`/team-stats?team=${encodeURIComponent(team.name)}`}
+                              className="font-medium text-sm hover:underline"
+                              style={{ color: schoolColor }}
+                            >
                               {team.name}
-                            </p>
+                            </Link>
                             <p className="text-xs text-gray-500">{team.conference}</p>
                           </div>
                         </div>
@@ -590,9 +622,13 @@ export default function DominanceClient() {
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold text-gray-400 w-6">#{rank}</span>
                           <div>
-                            <p className="font-medium text-sm text-gray-900" style={{ color: schoolColor }}>
+                            <Link 
+                              href={`/team-stats?team=${encodeURIComponent(team.name)}`}
+                              className="font-medium text-sm hover:underline"
+                              style={{ color: schoolColor }}
+                            >
                               {team.name}
-                            </p>
+                            </Link>
                             <p className="text-xs text-gray-500">{team.conference}</p>
                           </div>
                         </div>
@@ -647,9 +683,13 @@ export default function DominanceClient() {
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold text-gray-400 w-6">#{rank}</span>
                           <div>
-                            <p className="font-medium text-sm text-gray-900" style={{ color: schoolColor }}>
+                            <Link 
+                              href={`/team-stats?team=${encodeURIComponent(team.name)}`}
+                              className="font-medium text-sm hover:underline"
+                              style={{ color: schoolColor }}
+                            >
                               {team.name}
-                            </p>
+                            </Link>
                             <p className="text-xs text-gray-500">{team.conference}</p>
                           </div>
                         </div>
@@ -704,9 +744,13 @@ export default function DominanceClient() {
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold text-gray-400 w-6">#{rank}</span>
                           <div>
-                            <p className="font-medium text-sm text-gray-900" style={{ color: schoolColor }}>
+                            <Link 
+                              href={`/team-stats?team=${encodeURIComponent(team.name)}`}
+                              className="font-medium text-sm hover:underline"
+                              style={{ color: schoolColor }}
+                            >
                               {team.name}
-                            </p>
+                            </Link>
                             <p className="text-xs text-gray-500">{team.conference}</p>
                           </div>
                         </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface WrestlerMatch {
   wrestler: string;
@@ -299,7 +300,7 @@ export default function WrestlersClient() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                   </svg>
-                  Share
+                  Copy URL
                 </>
               )}
             </button>
@@ -742,10 +743,20 @@ export default function WrestlersClient() {
                         {match.wt}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {match.opponent}
+                        <Link 
+                          href={`/wrestlers?wrestler=${encodeURIComponent(match.opponent)}`}
+                          className="text-blue-600 hover:text-blue-800 hover:underline"
+                        >
+                          {match.opponent}
+                        </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {match.opponent_school}
+                        <Link 
+                          href={`/team-stats?team=${encodeURIComponent(match.opponent_school)}`}
+                          className="text-blue-600 hover:text-blue-800 hover:underline"
+                        >
+                          {match.opponent_school}
+                        </Link>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
                         {match.location}

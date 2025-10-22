@@ -45,13 +45,19 @@ export default function RootLayout({
                   href="/teams" 
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  Teams
+                  Duals
                 </Link>
                 <Link 
                   href="/wrestlers" 
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
                   Wrestlers
+                </Link>
+                <Link 
+                  href="/dominance" 
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  Dominance
                 </Link>
                 <Link 
                   href="/about" 

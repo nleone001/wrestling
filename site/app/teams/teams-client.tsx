@@ -370,7 +370,7 @@ export default function TeamsClient() {
         <div className="mb-8">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Team Results</h1>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">Team Dual Results</h1>
               <p className="text-gray-600">Select a team to view their dual meet results</p>
             </div>
             <button
@@ -606,7 +606,7 @@ export default function TeamsClient() {
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-2xl font-semibold text-gray-900">
-                {selectedTeam} Results
+                {selectedTeam} Dual Results
               </h2>
               <p className="text-gray-600">
                 {teamResults.length} dual meet{teamResults.length !== 1 ? 's' : ''} this season

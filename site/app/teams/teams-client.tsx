@@ -682,15 +682,19 @@ export default function TeamsClient() {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <button
-                            onClick={() => {
-                              setSelectedDual(result);
-                              setShowModal(true);
-                            }}
-                            className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          >
-                            View Details
-                          </button>
+                          {result.d1 === 'D1' ? (
+                            <button
+                              onClick={() => {
+                                setSelectedDual(result);
+                                setShowModal(true);
+                              }}
+                              className="inline-flex items-center px-3 py-1 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                              View Details
+                            </button>
+                          ) : (
+                            <span className="text-gray-400 text-xs">No details available</span>
+                          )}
                         </td>
                       </tr>
                     ))}

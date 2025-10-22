@@ -48,6 +48,12 @@ export default function RootLayout({
                   Teams
                 </Link>
                 <Link 
+                  href="/wrestlers" 
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  Wrestlers
+                </Link>
+                <Link 
                   href="/about" 
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >

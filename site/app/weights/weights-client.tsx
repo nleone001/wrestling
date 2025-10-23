@@ -1,25 +1,31 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import dynamic from 'next/dynamic';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// Dynamically import Chart.js components to avoid SSR issues
+const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), {
+  ssr: false,
+  loading: () => <div className="h-full flex items-center justify-center bg-gray-50 rounded-lg">
+    <div className="text-center">
+      <div className="text-gray-500 text-lg mb-2">Loading chart...</div>
+    </div>
+  </div>
+});
+
+// Register Chart.js components on client side only
+if (typeof window !== 'undefined') {
+  import('chart.js').then((chart) => {
+    chart.Chart.register(
+      chart.CategoryScale,
+      chart.LinearScale,
+      chart.BarElement,
+      chart.Title,
+      chart.Tooltip,
+      chart.Legend
+    );
+  });
+}
 
 interface WrestlerMatch {
   wrestler: string;
@@ -297,7 +303,7 @@ export default function WeightsClient() {
             : (chartType === 'results' ? 'Number of Wins' : 'Count'),
         },
         ticks: displayMode === 'percentages' ? {
-          callback: function(value: any) {
+          callback: function(value: number | string) {
             return value + '%';
           }
         } : undefined,

@@ -62,6 +62,7 @@ interface DualResultsTableProps {
   schools: School[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function DualResultsTable({ dual, selectedTeam, schools }: DualResultsTableProps) {
   const [wrestlerMatches, setWrestlerMatches] = useState<WrestlerMatch[]>([]);
   const [loading, setLoading] = useState(true);

@@ -66,6 +66,12 @@ export default function RootLayout({
                   Dominance
                 </Link>
                 <Link 
+                  href="/weights" 
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  Weights
+                </Link>
+                <Link 
                   href="/about" 
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
